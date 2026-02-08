@@ -13,11 +13,20 @@ import re
 # CONFIGURATION
 # ==========================================
 app = Flask(__name__)
-app.secret_key = 'recrutai_production_key_v1'
-app.config['SESSION_COOKIE_NAME'] = 'recrutai_session'
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-app.config['SESSION_COOKIE_SECURE'] = False 
-app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 1 day
+
+app.secret_key = os.environ.get(
+    "FLASK_SECRET_KEY",
+    "recrutai_production_key_v1"
+)
+
+app.config.update(
+    SESSION_COOKIE_NAME="recrutai_session",
+    SESSION_COOKIE_SECURE=True,      # REQUIRED for HTTPS
+    SESSION_COOKIE_SAMESITE="None",  # REQUIRED for OAuth
+    SESSION_PERMANENT=True,
+    PERMANENT_SESSION_LIFETIME=86400
+)
+
 
 # SUPABASE CREDENTIALS
 SUPABASE_URL = "https://ayzlmwziqlbydpmrbcwy.supabase.co"
